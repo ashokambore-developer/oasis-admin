@@ -1,0 +1,59 @@
+{
+  "name": "@oasis/admin-panel",
+  "version": "1.0.0",
+  "description": "Oasis Admin Panel",
+  "homepage": ".",
+  "bugs": {
+    "url": "https://github.com/deepak-evotize/oasis-admin.git"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deepak-evotize/oasis-admin.git"
+  },
+  "license": "MIT",
+  "author": "Ashok Ambore",
+  "scripts": {
+    "build": "vite build",
+    "lint": "eslint",
+    "serve": "vite preview",
+    "start": "vite"
+  },
+  "dependencies": {
+    "@coreui/chartjs": "^4.2.0",
+    "@coreui/coreui": "^5.6.1",
+    "@coreui/icons": "^3.0.1",
+    "@coreui/icons-react": "^2.3.0",
+    "@coreui/react": "^5.10.0",
+    "@coreui/react-chartjs": "^3.0.0",
+    "@coreui/utils": "^2.0.2",
+    "@popperjs/core": "^2.11.8",
+    "@tanstack/react-query": "^5.101.0",
+    "axios": "^1.18.0",
+    "chart.js": "^4.5.1",
+    "classnames": "^2.5.1",
+    "core-js": "^3.49.0",
+    "prop-types": "^15.8.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.13.2",
+    "redux": "5.0.1",
+    "simplebar-react": "^3.3.2",
+    "socket.io-client": "^4.8.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.1",
+    "autoprefixer": "^10.4.27",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^16.5.0",
+    "postcss": "^8.5.8",
+    "prettier": "3.8.1",
+    "sass": "^1.98.0",
+    "vite": "^8.0.3",
+    "vite-plugin-pwa": "^1.3.0"
+  }
+}
