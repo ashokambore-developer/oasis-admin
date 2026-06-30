@@ -62,7 +62,6 @@ const SafariSessions = () => {
     <CCard>
       <CCardHeader>
         <strong>Safari Sessions</strong>
-
       </CCardHeader>
       <CCardBody>
         <CRow className="mb-3 g-2">
@@ -127,9 +126,9 @@ const SafariSessions = () => {
                       <div className="small fw-semibold">{s.startedByUser?.name}</div>
                       <div className="small text-muted">{s.startedByUser?.email}</div>
                     </CTableDataCell>
-                    <CTableDataCell className="small">{s.destination?.name || '-"'}</CTableDataCell>
-                    <CTableDataCell className="small">{s.trip?.title || '-"'}</CTableDataCell>
-                    <CTableDataCell className="small">{s.zone || '-"'}</CTableDataCell>
+                    <CTableDataCell className="small">{s.destination?.name || '-'}</CTableDataCell>
+                    <CTableDataCell className="small">{s.trip?.title || '-'}</CTableDataCell>
+                    <CTableDataCell className="small">{s.zone || '-'}</CTableDataCell>
                     <CTableDataCell>
                       <CBadge color={STATUS_COLOR[s.status] || 'secondary'}>{s.status}</CBadge>
                     </CTableDataCell>
