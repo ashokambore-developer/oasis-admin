@@ -56,6 +56,10 @@ const Login = () => {
                     />
                   </CInputGroup>
 
+                  <p className="text-body-secondary small mb-3">
+                    API: <code>{API_BASE_URL}</code>
+                  </p>
+
                   <CInputGroup className="mb-4">
                     <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
