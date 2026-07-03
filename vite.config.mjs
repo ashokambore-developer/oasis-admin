@@ -13,6 +13,9 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: 'build',
     },
+    preview: {
+      allowedHosts: ['*.up.railway.app', 'localhost'],
+    },
     css: {
       postcss: {
         plugins: [
@@ -33,9 +36,7 @@ export default defineConfig(({ mode }) => {
           background_color: '#ffffff',
           display: 'standalone',
           start_url: '/',
-          icons: [
-            { src: 'oasis-icon.png', sizes: 'any', type: 'image/png' },
-          ],
+          icons: [{ src: 'oasis-icon.png', sizes: 'any', type: 'image/png' }],
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
