@@ -59,6 +59,9 @@ export default defineConfig(({ mode }) => {
       ],
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.scss'],
     },
+    preview: {
+      allowedHosts: ['*.up.railway.app', 'localhost'],
+    },
     server: {
       port: 3000,
       host: true,
@@ -80,3 +83,4 @@ export default defineConfig(({ mode }) => {
     },
   }
 })
+
