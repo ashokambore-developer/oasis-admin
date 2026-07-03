@@ -17,6 +17,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useAuth } from '../../../context/AuthContext'
+import { API_BASE_URL } from '../../../lib/config'
 
 const Login = () => {
   const { login, loading, error } = useAuth()
