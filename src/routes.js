@@ -50,6 +50,8 @@ const WebhookLog = React.lazy(() => import('./views/monitoring/WebhookLog'))
 const NotificationLog = React.lazy(() => import('./views/monitoring/NotificationLog'))
 const NotificationQueue = React.lazy(() => import('./views/monitoring/NotificationQueue'))
 const Analytics = React.lazy(() => import('./views/monitoring/Analytics'))
+const CronJobs = React.lazy(() => import('./views/monitoring/CronJobs'))
+const TriggerList = React.lazy(() => import('./views/monitoring/TriggerList'))
 
 // Media
 const MediaLibrary = React.lazy(() => import('./views/media/MediaLibrary'))
@@ -116,6 +118,8 @@ export const routes = [
   { path: '/notifications/log', name: 'Notification Log', element: NotificationLog },
   { path: '/notifications/queue', name: 'Notification Queue', element: NotificationQueue },
   { path: '/analytics', name: 'Analytics', element: Analytics },
+  { path: '/cron', name: 'Cron Jobs', element: CronJobs },
+  { path: '/triggers', name: 'Triggers', element: TriggerList },
 
   // Media
   { path: '/media', name: 'Media Library', element: MediaLibrary },

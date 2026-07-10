@@ -24,6 +24,8 @@ import {
   cilTags,
   cilCheckCircle,
   cilImage,
+  cilHistory,
+  cilBolt,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -171,6 +173,18 @@ const _nav = [
     name: 'Analytics',
     to: '/analytics',
     icon: <CIcon icon={cilChart} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Cron Jobs',
+    to: '/cron',
+    icon: <CIcon icon={cilHistory} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Triggers',
+    to: '/triggers',
+    icon: <CIcon icon={cilBolt} customClassName="nav-icon" />,
   },
 
   { component: CNavTitle, name: 'Settings' },

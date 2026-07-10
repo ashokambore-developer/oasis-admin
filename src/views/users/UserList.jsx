@@ -117,7 +117,6 @@ const UserList = () => {
               <option value="PHOTOGRAPHER">Photographer</option>
               <option value="SERVICE_PROVIDER">Service Provider</option>
               <option value="TRIP_MANAGER">Trip Manager</option>
-              <option value="ADMIN">Admin</option>
             </CFormSelect>
           </CCol>
           <CCol md={3}>
