@@ -238,7 +238,13 @@ const TripDetail = () => {
           <Pill label="Participants" value={trip._count?.participants ?? 0} />
           <Pill label="Max Slots" value={trip.maxSlots ?? 'Open'} />
           <Pill label="Rating" value={avgRating ? (avgRating + ' / 5') : '-'} />
-          <Pill label="Reviews" value={trip._count?.reviews ?? 0} />
+          <Pill label="Reviews" value={trip.reviewCount ?? trip._count?.reviews ?? 0} />
+          <Pill label="Confirmed" value={trip.confirmedParticipantsCount ?? 0} />
+          <Pill label="Paid" value={trip.paidParticipantsCount ?? 0} />
+          <Pill label="Favorited" value={trip.favoriteCount ?? 0} />
+          <Pill label="Sightings" value={trip.sightingCount ?? 0} />
+          <Pill label="Refunds" value={trip.refundCount ?? 0} />
+          <Pill label="Pending Payouts" value={trip.pendingPayoutsCount ?? 0} />
           <div className="text-center px-3">
             <div className="fw-bold small">{fmtDate(trip.createdAt)}</div>
             <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: 1 }} className="text-muted">Created</div>

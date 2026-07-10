@@ -19,6 +19,7 @@ import {
   CFormInput,
   CFormSelect,
   CFormCheck,
+  CFormTextarea,
   CListGroup,
   CListGroupItem,
   CTable,
@@ -38,6 +39,32 @@ const fmtPrice = (minor) => {
   if (minor == null) return '-'
   return '₹' + (Number(minor) / 100).toLocaleString('en-IN', { maximumFractionDigits: 0 })
 }
+
+// photographyFriendly is stored as a JSON-encoded string: { level, compositions?, recommendedGear?, tip? }.
+// Some legacy rows may still hold a bare level string ("High"/"Medium"/"Low") — fall back gracefully.
+const parsePhotographyFriendly = (raw) => {
+  if (!raw) return { level: 'Medium', compositions: [], recommendedGear: [], tip: '' }
+  if (typeof raw === 'object') {
+    return {
+      level: raw.level || 'Medium',
+      compositions: raw.compositions || [],
+      recommendedGear: raw.recommendedGear || [],
+      tip: raw.tip || '',
+    }
+  }
+  try {
+    const parsed = JSON.parse(raw)
+    return {
+      level: parsed.level || 'Medium',
+      compositions: parsed.compositions || [],
+      recommendedGear: parsed.recommendedGear || [],
+      tip: parsed.tip || '',
+    }
+  } catch {
+    // Legacy plain-string value
+    return { level: raw, compositions: [], recommendedGear: [], tip: '' }
+  }
+}
 const TRIP_STATUS_COLOR = {
   ACTIVE: 'success',
   RUNNING: 'info',
@@ -55,6 +82,27 @@ const InfoRow = ({ label, value }) => (
     >
       {value ?? '-'}
     </span>
+  </CListGroupItem>
+)
+
+// Renders a comma-separated list of values as chips instead of a plain joined string
+const ChipsRow = ({ label, values }) => (
+  <CListGroupItem className="d-flex justify-content-between align-items-start py-2 px-0 border-start-0 border-end-0">
+    <span className="text-muted small">{label}</span>
+    <div
+      className="d-flex flex-wrap gap-1 justify-content-end"
+      style={{ maxWidth: '65%' }}
+    >
+      {values && values.length > 0 ? (
+        values.map((v) => (
+          <CBadge key={v} color="light" textColor="dark" className="border fw-normal">
+            {v}
+          </CBadge>
+        ))
+      ) : (
+        <span className="small fw-semibold">-</span>
+      )}
+    </div>
   </CListGroupItem>
 )
 
@@ -141,7 +189,10 @@ const DestinationDetail = () => {
         isPopular: dest.isPopular || false,
       },
       nature: {
-        photographyFriendly: dest.photographyFriendly || 'Medium',
+        photographyLevel: parsePhotographyFriendly(dest.photographyFriendly).level,
+        photographyCompositions: parsePhotographyFriendly(dest.photographyFriendly).compositions.join(', '),
+        photographyRecommendedGear: parsePhotographyFriendly(dest.photographyFriendly).recommendedGear.join(', '),
+        photographyTip: parsePhotographyFriendly(dest.photographyFriendly).tip,
         photographyPermits: dest.photographyPermits || '',
         category: (dest.category || []).join(', '),
         species: (dest.species || []).join(', '),
@@ -194,7 +245,10 @@ const DestinationDetail = () => {
         isPopular: dest.isPopular || false,
       },
       nature: {
-        photographyFriendly: dest.photographyFriendly || 'Medium',
+        photographyLevel: parsePhotographyFriendly(dest.photographyFriendly).level,
+        photographyCompositions: parsePhotographyFriendly(dest.photographyFriendly).compositions.join(', '),
+        photographyRecommendedGear: parsePhotographyFriendly(dest.photographyFriendly).recommendedGear.join(', '),
+        photographyTip: parsePhotographyFriendly(dest.photographyFriendly).tip,
         photographyPermits: dest.photographyPermits || '',
         category: (dest.category || []).join(', '),
         species: (dest.species || []).join(', '),
@@ -227,7 +281,18 @@ const DestinationDetail = () => {
       }
     } else if (tab === 'nature') {
       payload = {
-        photographyFriendly: f.photographyFriendly,
+        photographyFriendly: JSON.stringify({
+          level: f.photographyLevel,
+          compositions: f.photographyCompositions
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean),
+          recommendedGear: f.photographyRecommendedGear
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean),
+          tip: f.photographyTip || undefined,
+        }),
         photographyPermits: f.photographyPermits || undefined,
         category: f.category
           .split(',')
@@ -419,7 +484,7 @@ const DestinationDetail = () => {
               <div className="d-flex flex-wrap gap-2">
                 {dest.isPopular && <CBadge color="success">Popular</CBadge>}
                 <CBadge color="light" textColor="dark">
-                  {dest.photographyFriendly} Photography
+                  {parsePhotographyFriendly(dest.photographyFriendly).level} Photography
                 </CBadge>
                 {avgRating && (
                   <CBadge color="warning" textColor="dark">
@@ -535,6 +600,24 @@ const DestinationDetail = () => {
                       </div>
                     </CCol>
                   )}
+                  <CCol md={12}>
+                    <div className="mt-3 p-3 border rounded">
+                      <div
+                        className="small fw-semibold text-uppercase text-muted mb-2"
+                        style={{ letterSpacing: '0.03em' }}
+                      >
+                        Stats
+                      </div>
+                      <CListGroup flush>
+                        <InfoRow label="Min Trip Price" value={fmtPrice(dest.minTripPriceMinor)} />
+                        <InfoRow label="Trips" value={dest.tripsCount ?? 0} />
+                        <InfoRow label="Service Providers" value={dest.providersCount ?? 0} />
+                        <InfoRow label="Wishlisted" value={dest.wishlistCount ?? 0} />
+                        <InfoRow label="Sightings" value={dest.sightingCount ?? 0} />
+                        <InfoRow label="Reviews" value={dest.reviewCount ?? 0} />
+                      </CListGroup>
+                    </div>
+                  </CCol>
                 </CRow>
               ) : (
                 <CRow className="g-3">
@@ -637,72 +720,142 @@ const DestinationDetail = () => {
               />
 
               {!isEditing('nature') ? (
-                <CListGroup flush>
-                  <InfoRow label="Photography Friendly" value={dest.photographyFriendly} />
-                  <InfoRow label="Photography Permits" value={dest.photographyPermits} />
-                  <InfoRow label="Categories" value={(dest.category || []).join(', ') || null} />
-                  <InfoRow label="Species" value={(dest.species || []).join(', ') || null} />
-                  <InfoRow
-                    label="Conservation Status"
-                    value={(dest.conservationStatus || []).join(', ') || null}
-                  />
-                </CListGroup>
+                <>
+                  <div className="border rounded p-3 mb-3 bg-body-tertiary">
+                    <div
+                      className="small fw-semibold text-uppercase text-muted mb-2"
+                      style={{ letterSpacing: '0.03em' }}
+                    >
+                      Photography Friendly
+                    </div>
+                    <CListGroup flush>
+                      <InfoRow
+                        label="Level"
+                        value={parsePhotographyFriendly(dest.photographyFriendly).level}
+                      />
+                      <InfoRow label="Permits" value={dest.photographyPermits} />
+                      <ChipsRow
+                        label="Compositions"
+                        values={parsePhotographyFriendly(dest.photographyFriendly).compositions}
+                      />
+                      <ChipsRow
+                        label="Recommended Gear"
+                        values={parsePhotographyFriendly(dest.photographyFriendly).recommendedGear}
+                      />
+                      <InfoRow
+                        label="Tip"
+                        value={parsePhotographyFriendly(dest.photographyFriendly).tip || null}
+                      />
+                    </CListGroup>
+                  </div>
+                  <CListGroup flush>
+                    <InfoRow label="Categories" value={(dest.category || []).join(', ') || null} />
+                    <ChipsRow label="Species" values={dest.species || []} />
+                    <InfoRow
+                      label="Conservation Status"
+                      value={(dest.conservationStatus || []).join(', ') || null}
+                    />
+                  </CListGroup>
+                </>
               ) : (
-                <CRow className="g-3">
-                  <CCol md={4}>
-                    <EditRow label="Photography Friendly">
-                      <CFormSelect
-                        size="sm"
-                        value={f('nature').photographyFriendly}
-                        onChange={(e) => setField('nature', 'photographyFriendly', e.target.value)}
-                      >
-                        <option value="High">High</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Low">Low</option>
-                      </CFormSelect>
-                    </EditRow>
-                  </CCol>
-                  <CCol md={8}>
-                    <EditRow label="Photography Permits">
-                      <CFormInput
-                        size="sm"
-                        value={f('nature').photographyPermits}
-                        onChange={(e) => setField('nature', 'photographyPermits', e.target.value)}
-                        placeholder="e.g. No drone, permit required."
-                      />
-                    </EditRow>
-                  </CCol>
-                  <CCol md={6}>
-                    <EditRow label="Categories (comma-separated)">
-                      <CFormInput
-                        size="sm"
-                        value={f('nature').category}
-                        onChange={(e) => setField('nature', 'category', e.target.value)}
-                        placeholder="Wildlife, Forest, Lake."
-                      />
-                    </EditRow>
-                  </CCol>
-                  <CCol md={6}>
-                    <EditRow label="Species (comma-separated)">
-                      <CFormInput
-                        size="sm"
-                        value={f('nature').species}
-                        onChange={(e) => setField('nature', 'species', e.target.value)}
-                        placeholder="Tiger, Leopard, Elephant."
-                      />
-                    </EditRow>
-                  </CCol>
-                  <CCol md={12}>
-                    <EditRow label="Conservation Status (comma-separated)">
-                      <CFormInput
-                        size="sm"
-                        value={f('nature').conservationStatus}
-                        onChange={(e) => setField('nature', 'conservationStatus', e.target.value)}
-                        placeholder="Protected, National Park."
-                      />
-                    </EditRow>
-                  </CCol>
-                </CRow>
+                <>
+                  <div className="border rounded p-3 mb-3 bg-body-tertiary">
+                    <div
+                      className="small fw-semibold text-uppercase text-muted mb-3"
+                      style={{ letterSpacing: '0.03em' }}
+                    >
+                      Photography Friendly
+                    </div>
+                    <CRow className="g-3">
+                      <CCol md={4}>
+                        <EditRow label="Level">
+                          <CFormSelect
+                            size="sm"
+                            value={f('nature').photographyLevel}
+                            onChange={(e) => setField('nature', 'photographyLevel', e.target.value)}
+                          >
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                          </CFormSelect>
+                        </EditRow>
+                      </CCol>
+                      <CCol md={8}>
+                        <EditRow label="Permits">
+                          <CFormInput
+                            size="sm"
+                            value={f('nature').photographyPermits}
+                            onChange={(e) => setField('nature', 'photographyPermits', e.target.value)}
+                            placeholder="e.g. No drone, permit required."
+                          />
+                        </EditRow>
+                      </CCol>
+                      <CCol md={6}>
+                        <EditRow label="Compositions (comma-separated)">
+                          <CFormInput
+                            size="sm"
+                            value={f('nature').photographyCompositions}
+                            onChange={(e) => setField('nature', 'photographyCompositions', e.target.value)}
+                            placeholder="Lake-and-forest landscapes, Rare-species birding."
+                          />
+                        </EditRow>
+                      </CCol>
+                      <CCol md={6}>
+                        <EditRow label="Recommended Gear (comma-separated)">
+                          <CFormInput
+                            size="sm"
+                            value={f('nature').photographyRecommendedGear}
+                            onChange={(e) => setField('nature', 'photographyRecommendedGear', e.target.value)}
+                            placeholder="400mm+ telephoto lens, Wide-angle for lakescapes."
+                          />
+                        </EditRow>
+                      </CCol>
+                      <CCol md={12}>
+                        <EditRow label="Tip">
+                          <CFormTextarea
+                            size="sm"
+                            rows={2}
+                            value={f('nature').photographyTip}
+                            onChange={(e) => setField('nature', 'photographyTip', e.target.value)}
+                            placeholder="A 400mm+ lens helps for shy forest mammals..."
+                          />
+                        </EditRow>
+                      </CCol>
+                    </CRow>
+                  </div>
+                  <CRow className="g-3">
+                    <CCol md={6}>
+                      <EditRow label="Categories (comma-separated)">
+                        <CFormInput
+                          size="sm"
+                          value={f('nature').category}
+                          onChange={(e) => setField('nature', 'category', e.target.value)}
+                          placeholder="Wildlife, Forest, Lake."
+                        />
+                      </EditRow>
+                    </CCol>
+                    <CCol md={6}>
+                      <EditRow label="Species (comma-separated)">
+                        <CFormInput
+                          size="sm"
+                          value={f('nature').species}
+                          onChange={(e) => setField('nature', 'species', e.target.value)}
+                          placeholder="Tiger, Leopard, Elephant."
+                        />
+                      </EditRow>
+                    </CCol>
+                    <CCol md={12}>
+                      <EditRow label="Conservation Status (comma-separated)">
+                        <CFormInput
+                          size="sm"
+                          value={f('nature').conservationStatus}
+                          onChange={(e) => setField('nature', 'conservationStatus', e.target.value)}
+                          placeholder="Protected, National Park."
+                        />
+                      </EditRow>
+                    </CCol>
+                  </CRow>
+                </>
               )}
             </CTabPane>
 
@@ -740,11 +893,8 @@ const DestinationDetail = () => {
                         label="Best Time to Visit"
                         value={(dest.bestTimeToVisit || []).join(', ') || null}
                       />
-                      <InfoRow label="Tags" value={(dest.tags || []).join(', ') || null} />
-                      <InfoRow
-                        label="Features"
-                        value={(dest.availableFeatures || []).join(', ') || null}
-                      />
+                      <ChipsRow label="Tags" values={dest.tags || []} />
+                      <ChipsRow label="Features" values={dest.availableFeatures || []} />
                     </CListGroup>
                   </CCol>
                 </CRow>

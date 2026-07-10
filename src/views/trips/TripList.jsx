@@ -9,7 +9,7 @@ import {
   CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CFormTextarea,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilZoomIn, cilSettings, cilStar } from '@coreui/icons'
+import { cilZoomIn, cilSettings, cilBookmark } from '@coreui/icons'
 import SortableHeader from '../../components/SortableHeader'
 import AdminTableFooter from '../../components/AdminTableFooter'
 import api from '../../lib/api'
@@ -140,6 +140,7 @@ const TripList = () => {
                     <CTableHeaderCell>Featured</CTableHeaderCell>
                     <SortableHeader field="priceMinor" label="Price" sortBy={sortBy} sortOrder={sortOrder} onSort={handleSort} />
                     <SortableHeader field="participants" label="Participants" sortBy={sortBy} sortOrder={sortOrder} onSort={handleSort} />
+                    <CTableHeaderCell>Rating</CTableHeaderCell>
                     <SortableHeader field="createdAt" label="Created" sortBy={sortBy} sortOrder={sortOrder} onSort={handleSort} />
                     <CTableHeaderCell>Action</CTableHeaderCell>
                   </CTableRow>
@@ -163,11 +164,16 @@ const TripList = () => {
                           onClick={() => toggleFeatured(t)}
                           title={t.featured ? 'Remove from featured' : 'Mark as featured'}
                         >
-                          <CIcon icon={cilStar} size="sm" />
+                          <CIcon icon={cilBookmark} size="sm" />
                         </CButton>
                       </CTableDataCell>
                       <CTableDataCell className="small">{formatRupees(t.priceMinor)}</CTableDataCell>
-                      <CTableDataCell className="small">{t._count?.participants ?? 0}</CTableDataCell>
+                      <CTableDataCell className="small">
+                        {t.confirmedParticipantsCount ?? t._count?.participants ?? 0}
+                      </CTableDataCell>
+                      <CTableDataCell className="small">
+                        {t.rating != null ? `★ ${t.rating.toFixed(1)} (${t.reviewCount ?? 0})` : '-'}
+                      </CTableDataCell>
                       <CTableDataCell className="small text-muted">
                         {fmtDate(t.createdAt)}
                       </CTableDataCell>

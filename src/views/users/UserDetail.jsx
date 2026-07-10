@@ -373,9 +373,11 @@ const UserDetail = () => {
     return <div className="text-center py-5"><CSpinner color="primary" /></div>
   if (isError || !user) return <CAlert color="danger">Failed to load user.</CAlert>
 
-  const avgRating = user.receivedReviews?.length
-    ? (user.receivedReviews.reduce((s, r) => s + r.rating, 0) / user.receivedReviews.length).toFixed(1)
-    : null
+  // Use the denormalized aggregate — `receivedReviews` is capped at 10 rows
+  // server-side, so averaging it directly would be wrong for anyone with more.
+  const avgRating = user.avgRating != null ? user.avgRating.toFixed(1) : null
+  const reviewCount = user.reviewCount ?? 0
+  const favoritesReceivedCount = user.favoritesCount ?? 0
 
   const isSP = user.role === 'SERVICE_PROVIDER'
   const isTM = user.role === 'TRIP_MANAGER'
@@ -445,6 +447,9 @@ const UserDetail = () => {
             {isSP && <StatCard label="Assignments" value={user._count?.tripProviderAssignmentsAsProvider} color="primary" />}
             {hasPayouts && <StatCard label="Payouts" value={user._count?.payouts} color="success" />}
             <StatCard label="Favourites" value={user._count?.favorites} color="secondary" />
+            {(isPG || isSP) && (
+              <StatCard label="Favorited By" value={favoritesReceivedCount} color="secondary" />
+            )}
             <div className="text-center px-3 py-2">
               <div className="fw-bold fs-5 text-muted">{fmtDate(user.createdAt)}</div>
               <div className="small text-muted">Joined</div>
@@ -805,7 +810,11 @@ const UserDetail = () => {
                       {avgRating && (
                         <div className="mb-3 d-flex align-items-center gap-2">
                           <span className="fs-4 fw-bold text-warning">★ {avgRating}</span>
-                          <span className="text-muted small">average from {user.receivedReviews.length} reviews</span>
+                          <span className="text-muted small">
+                            average from {reviewCount} review{reviewCount === 1 ? '' : 's'}
+                            {user.receivedReviews.length < reviewCount &&
+                              ` (showing latest ${user.receivedReviews.length})`}
+                          </span>
                         </div>
                       )}
                       <div className="d-flex flex-column gap-3">
