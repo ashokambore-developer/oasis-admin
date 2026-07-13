@@ -28,6 +28,7 @@ const PayoutDetail = React.lazy(() => import('./views/finance/PayoutDetail'))
 const PayoutSchedule = React.lazy(() => import('./views/finance/PayoutSchedule'))
 const PaymentList = React.lazy(() => import('./views/finance/PaymentList'))
 const RefundList = React.lazy(() => import('./views/finance/RefundList'))
+const DiscountList = React.lazy(() => import('./views/finance/DiscountList'))
 const RefundDetail = React.lazy(() => import('./views/finance/RefundDetail'))
 const LinkedAccounts = React.lazy(() => import('./views/finance/LinkedAccounts'))
 const LinkedAccountDetail = React.lazy(() => import('./views/finance/LinkedAccountDetail'))
@@ -92,6 +93,7 @@ export const routes = [
   { path: '/finance', name: 'Financial Dashboard', element: FinancialDashboard },
   { path: '/payments/refunds/:id', name: 'Refund Detail', element: RefundDetail },
   { path: '/payments/refunds', name: 'Refunds', element: RefundList },
+  { path: '/payments/coupons', name: 'Coupons', element: DiscountList },
   { path: '/payments/linked-accounts/:id', name: 'Linked Account Detail', element: LinkedAccountDetail },
   { path: '/payments/linked-accounts', name: 'Linked Accounts', element: LinkedAccounts },
   { path: '/payments/:id', name: 'Payment Detail', element: PaymentDetail },

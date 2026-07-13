@@ -110,6 +110,7 @@ const _nav = [
     items: [
       { component: CNavItem, name: 'All Payments', to: '/payments', end: true },
       { component: CNavItem, name: 'Refunds', to: '/payments/refunds', end: true },
+      { component: CNavItem, name: 'Coupons', to: '/payments/coupons', end: true },
       { component: CNavItem, name: 'Linked Accounts', to: '/payments/linked-accounts', end: true },
     ],
   },
