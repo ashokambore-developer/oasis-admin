@@ -38,6 +38,31 @@ const fetchDestination = async (id) => {
   return res.data.data || res.data
 }
 
+// photographyFriendly is stored as a JSON-encoded string: { level, compositions?, recommendedGear?, tip? }.
+// Some legacy rows may still hold a bare level string ("High"/"Medium"/"Low") — fall back gracefully.
+const parsePhotographyFriendly = (raw) => {
+  if (!raw) return { level: 'Medium', compositions: [], recommendedGear: [], tip: '' }
+  if (typeof raw === 'object') {
+    return {
+      level: raw.level || 'Medium',
+      compositions: raw.compositions || [],
+      recommendedGear: raw.recommendedGear || [],
+      tip: raw.tip || '',
+    }
+  }
+  try {
+    const parsed = JSON.parse(raw)
+    return {
+      level: parsed.level || 'Medium',
+      compositions: parsed.compositions || [],
+      recommendedGear: parsed.recommendedGear || [],
+      tip: parsed.tip || '',
+    }
+  } catch {
+    return { level: raw, compositions: [], recommendedGear: [], tip: '' }
+  }
+}
+
 const DestinationEdit = () => {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -66,7 +91,10 @@ const DestinationEdit = () => {
           country: d.country || '',
           region: d.region || '',
           description: d.description || '',
-          photographyFriendly: d.photographyFriendly || 'Medium',
+          photographyLevel: parsePhotographyFriendly(d.photographyFriendly).level,
+          photographyCompositions: parsePhotographyFriendly(d.photographyFriendly).compositions.join(', '),
+          photographyRecommendedGear: parsePhotographyFriendly(d.photographyFriendly).recommendedGear.join(', '),
+          photographyTip: parsePhotographyFriendly(d.photographyFriendly).tip,
           isPopular: d.isPopular || false,
           tags: (d.tags || []).join(', '),
           bestTimeToVisit: (d.bestTimeToVisit || []).join(', '),
@@ -117,8 +145,27 @@ const DestinationEdit = () => {
 
   const handleSave = () => {
     if (!form) return
+    const {
+      photographyLevel,
+      photographyCompositions,
+      photographyRecommendedGear,
+      photographyTip,
+      ...rest
+    } = form
     const payload = {
-      ...form,
+      ...rest,
+      photographyFriendly: JSON.stringify({
+        level: photographyLevel,
+        compositions: photographyCompositions
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean),
+        recommendedGear: photographyRecommendedGear
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean),
+        tip: photographyTip || undefined,
+      }),
       tags: form.tags
         .split(',')
         .map((t) => t.trim())
@@ -172,7 +219,10 @@ const DestinationEdit = () => {
       country: destination.country || '',
       region: destination.region || '',
       description: destination.description || '',
-      photographyFriendly: destination.photographyFriendly || 'Medium',
+      photographyLevel: parsePhotographyFriendly(destination.photographyFriendly).level,
+      photographyCompositions: parsePhotographyFriendly(destination.photographyFriendly).compositions.join(', '),
+      photographyRecommendedGear: parsePhotographyFriendly(destination.photographyFriendly).recommendedGear.join(', '),
+      photographyTip: parsePhotographyFriendly(destination.photographyFriendly).tip,
       isPopular: destination.isPopular || false,
       tags: (destination.tags || []).join(', '),
       bestTimeToVisit: (destination.bestTimeToVisit || []).join(', '),
@@ -187,7 +237,10 @@ const DestinationEdit = () => {
       country: '',
       region: '',
       description: '',
-      photographyFriendly: 'Medium',
+      photographyLevel: 'Medium',
+      photographyCompositions: '',
+      photographyRecommendedGear: '',
+      photographyTip: '',
       isPopular: false,
       tags: '',
       bestTimeToVisit: '',
@@ -264,11 +317,35 @@ const DestinationEdit = () => {
                   </CCol>
                   <CCol md={3}>
                     <label className="form-label small fw-semibold">Photography Friendly</label>
-                    <CFormSelect size="sm" {...field('photographyFriendly')}>
+                    <CFormSelect size="sm" {...field('photographyLevel')}>
                       <option value="High">High</option>
                       <option value="Medium">Medium</option>
                       <option value="Low">Low</option>
                     </CFormSelect>
+                  </CCol>
+                  <CCol md={6}>
+                    <label className="form-label small fw-semibold">Compositions (comma-separated)</label>
+                    <CFormInput
+                      size="sm"
+                      placeholder="Lake-and-forest landscapes, Rare-species birding."
+                      {...field('photographyCompositions')}
+                    />
+                  </CCol>
+                  <CCol md={6}>
+                    <label className="form-label small fw-semibold">Recommended Gear (comma-separated)</label>
+                    <CFormInput
+                      size="sm"
+                      placeholder="400mm+ telephoto lens, Wide-angle for lakescapes."
+                      {...field('photographyRecommendedGear')}
+                    />
+                  </CCol>
+                  <CCol md={12}>
+                    <label className="form-label small fw-semibold">Photography Tip</label>
+                    <CFormTextarea
+                      rows={2}
+                      placeholder="A 400mm+ lens helps for shy forest mammals..."
+                      {...field('photographyTip')}
+                    />
                   </CCol>
                   <CCol md={3}>
                     <label className="form-label small fw-semibold d-block">Popular</label>

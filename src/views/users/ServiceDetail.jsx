@@ -43,9 +43,9 @@ const ServiceDetail = () => {
   if (isLoading) return <div className="text-center py-5"><CSpinner color="primary" /></div>
   if (isError || !service) return <CAlert color="danger">Failed to load service details.</CAlert>
 
-  const avgRating = service.reviews?.length
-    ? (service.reviews.reduce((s, r) => s + (r.rating || 0), 0) / service.reviews.length).toFixed(1)
-    : null
+  // Use the denormalized aggregate rather than recomputing from the fetched reviews array
+  const avgRating = service.rating != null ? service.rating.toFixed(1) : null
+  const reviewCount = service.reviewCount ?? 0
 
   const images = service.media?.filter((m) => m.mimeType?.startsWith('image/')) || []
   const allImages = [...images, ...(service.mediaUrls || []).map((url) => ({ url, mimeType: 'image/jpeg' }))]
@@ -121,6 +121,8 @@ const ServiceDetail = () => {
                     </CBadge>
                   } />
                   <InfoRow label="Trip Assignments" value={service._count?.tripAssignments ?? 0} />
+                  <InfoRow label="Rating" value={avgRating ? `★ ${avgRating}` : null} />
+                  <InfoRow label="Reviews" value={reviewCount} />
                   <InfoRow label="Created" value={fmtDate(service.createdAt)} />
                   <InfoRow label="Updated" value={fmtDate(service.updatedAt)} />
                 </CListGroup>

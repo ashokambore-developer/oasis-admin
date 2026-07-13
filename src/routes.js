@@ -28,6 +28,7 @@ const PayoutDetail = React.lazy(() => import('./views/finance/PayoutDetail'))
 const PayoutSchedule = React.lazy(() => import('./views/finance/PayoutSchedule'))
 const PaymentList = React.lazy(() => import('./views/finance/PaymentList'))
 const RefundList = React.lazy(() => import('./views/finance/RefundList'))
+const DiscountList = React.lazy(() => import('./views/finance/DiscountList'))
 const RefundDetail = React.lazy(() => import('./views/finance/RefundDetail'))
 const LinkedAccounts = React.lazy(() => import('./views/finance/LinkedAccounts'))
 const LinkedAccountDetail = React.lazy(() => import('./views/finance/LinkedAccountDetail'))
@@ -50,6 +51,8 @@ const WebhookLog = React.lazy(() => import('./views/monitoring/WebhookLog'))
 const NotificationLog = React.lazy(() => import('./views/monitoring/NotificationLog'))
 const NotificationQueue = React.lazy(() => import('./views/monitoring/NotificationQueue'))
 const Analytics = React.lazy(() => import('./views/monitoring/Analytics'))
+const CronJobs = React.lazy(() => import('./views/monitoring/CronJobs'))
+const TriggerList = React.lazy(() => import('./views/monitoring/TriggerList'))
 
 // Media
 const MediaLibrary = React.lazy(() => import('./views/media/MediaLibrary'))
@@ -90,6 +93,7 @@ export const routes = [
   { path: '/finance', name: 'Financial Dashboard', element: FinancialDashboard },
   { path: '/payments/refunds/:id', name: 'Refund Detail', element: RefundDetail },
   { path: '/payments/refunds', name: 'Refunds', element: RefundList },
+  { path: '/payments/coupons', name: 'Coupons', element: DiscountList },
   { path: '/payments/linked-accounts/:id', name: 'Linked Account Detail', element: LinkedAccountDetail },
   { path: '/payments/linked-accounts', name: 'Linked Accounts', element: LinkedAccounts },
   { path: '/payments/:id', name: 'Payment Detail', element: PaymentDetail },
@@ -116,6 +120,8 @@ export const routes = [
   { path: '/notifications/log', name: 'Notification Log', element: NotificationLog },
   { path: '/notifications/queue', name: 'Notification Queue', element: NotificationQueue },
   { path: '/analytics', name: 'Analytics', element: Analytics },
+  { path: '/cron', name: 'Cron Jobs', element: CronJobs },
+  { path: '/triggers', name: 'Triggers', element: TriggerList },
 
   // Media
   { path: '/media', name: 'Media Library', element: MediaLibrary },

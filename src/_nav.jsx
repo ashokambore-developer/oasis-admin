@@ -24,6 +24,8 @@ import {
   cilTags,
   cilCheckCircle,
   cilImage,
+  cilHistory,
+  cilBolt,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -108,6 +110,7 @@ const _nav = [
     items: [
       { component: CNavItem, name: 'All Payments', to: '/payments', end: true },
       { component: CNavItem, name: 'Refunds', to: '/payments/refunds', end: true },
+      { component: CNavItem, name: 'Coupons', to: '/payments/coupons', end: true },
       { component: CNavItem, name: 'Linked Accounts', to: '/payments/linked-accounts', end: true },
     ],
   },
@@ -171,6 +174,18 @@ const _nav = [
     name: 'Analytics',
     to: '/analytics',
     icon: <CIcon icon={cilChart} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Cron Jobs',
+    to: '/cron',
+    icon: <CIcon icon={cilHistory} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Triggers',
+    to: '/triggers',
+    icon: <CIcon icon={cilBolt} customClassName="nav-icon" />,
   },
 
   { component: CNavTitle, name: 'Settings' },

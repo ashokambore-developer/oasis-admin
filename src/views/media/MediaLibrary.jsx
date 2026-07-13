@@ -292,7 +292,7 @@ const MediaSidebar = ({ item, brokenIds, onClose, onDelete, onToggleApproval, de
 const MediaLibrary = () => {
   const qc = useQueryClient()
   const [page, setPage]               = useState(1)
-  const [pageSize, setPageSize]       = useState(48)
+  const [pageSize, setPageSize]       = useState(20)
   const [search, setSearch]           = useState('')
   const [searchInput, setSearchInput] = useState('')
   const [typeFilter, setTypeFilter]   = useState('')
