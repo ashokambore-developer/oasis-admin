@@ -1,6 +1,6 @@
-# Oasis Admin — Feature Documentation
+# Globlo Admin — Feature Documentation
 
-This document covers every feature built into the Oasis Admin panel on top of the CoreUI React template. All data is fetched from the Oasis backend via REST endpoints at `/api/admin/*`, which internally call tRPC procedures through `adminProcedure` (requires `role === 'ADMIN'`).
+This document covers every feature built into the Globlo Admin panel on top of the CoreUI React template. All data is fetched from the Globlo backend via REST endpoints at `/api/admin/*`, which internally call tRPC procedures through `adminProcedure` (requires `role === 'ADMIN'`).
 
 ---
 

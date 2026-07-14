@@ -27,16 +27,23 @@ export default defineConfig(({ mode }) => {
       react(),
       VitePWA({
         registerType: 'prompt',
-        includeAssets: ['favicon.ico', 'oasis-icon.png'],
+        includeAssets: ['favicon.ico', 'globlo-icon.png', 'globlo-icon-1024.png'],
         manifest: {
-          name: 'Oasis Admin',
-          short_name: 'Oasis Admin',
-          description: 'Oasis Travel Platform Admin Panel',
+          name: 'Globlo Admin',
+          short_name: 'Globlo Admin',
+          description: 'Globlo Travel Platform Admin Panel',
           theme_color: '#321fdb',
           background_color: '#ffffff',
           display: 'standalone',
           start_url: '/',
-          icons: [{ src: 'oasis-icon.png', sizes: 'any', type: 'image/png' }],
+          // Chrome's installability check requires an explicit numeric size
+          // >=192 and >=512 in both dimensions — a single `sizes: "any"`
+          // icon silently fails that check (no error, install prompt just
+          // never appears). Two concrete sizes fixes it.
+          icons: [
+            { src: 'globlo-icon.png', sizes: '192x192', type: 'image/png' },
+            { src: 'globlo-icon-1024.png', sizes: '1024x1024', type: 'image/png' },
+          ],
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],

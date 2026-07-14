@@ -22,7 +22,7 @@ const PWAUpdatePrompt = () => {
     >
       <CAlert color="primary" className="d-flex align-items-center gap-3 shadow mb-0">
         <div className="flex-grow-1 small">
-          A new version of Oasis Admin is available.
+          A new version of Globlo Admin is available.
         </div>
         <div className="d-flex gap-2 flex-shrink-0">
           <CButton size="sm" color="primary" onClick={() => updateServiceWorker(true)}>

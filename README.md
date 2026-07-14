@@ -1,6 +1,6 @@
-# Oasis Admin Panel
+# Globlo Admin Panel
 
-Internal administration dashboard for the **Oasis** wildlife & curated-travel platform. Built with React + CoreUI, communicates with the Oasis backend via tRPC and REST APIs.
+Internal administration dashboard for the **Globlo** wildlife & curated-travel platform. Built with React + CoreUI, communicates with the Globlo backend via tRPC and REST APIs.
 
 ---
 
