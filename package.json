@@ -1,7 +1,7 @@
 {
-  "name": "@oasis/admin-panel",
+  "name": "@globlo/admin-panel",
   "version": "1.0.0",
-  "description": "Oasis Admin Panel",
+  "description": "Globlo Admin Panel",
   "homepage": ".",
   "bugs": {
     "url": "https://github.com/deepak-evotize/oasis-admin.git"

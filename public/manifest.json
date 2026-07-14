@@ -1,10 +1,15 @@
 {
-  "short_name": "Oasis Admin",
-  "name": "Oasis Admin",
+  "short_name": "Globlo Admin",
+  "name": "Globlo Admin",
   "icons": [
     {
-      "src": "/oasis-icon.png",
-      "sizes": "any",
+      "src": "/globlo-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/globlo-icon-1024.png",
+      "sizes": "1024x1024",
       "type": "image/png"
     }
   ],

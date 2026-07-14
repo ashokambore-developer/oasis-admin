@@ -32,8 +32,8 @@ import {
 } from '@coreui/react'
 import { AppSidebarNav } from './AppSidebarNav'
 
-import oasisLogo from 'src/assets/images/logo.png'
-import oasisIcon from 'src/assets/images/oasis-app-icon-square.png'
+import globloLogo from 'src/assets/images/globlo-full-icon.png'
+import globloIcon from 'src/assets/images/globlo-app-icon-square.png'
 
 // sidebar nav config
 import navigation from '../_nav'
@@ -68,8 +68,14 @@ const AppSidebar = () => {
     >
       <CSidebarHeader className="border-bottom">
         <CSidebarBrand to="/">
-          <img className="sidebar-brand-full" src={oasisLogo} height={32} alt="Oasis" style={{ objectFit: 'contain' }} />
-          <img className="sidebar-brand-narrow" src={oasisIcon} height={32} alt="Oasis" style={{ objectFit: 'contain' }} />
+          <img
+            className="sidebar-brand-full"
+            src={globloLogo}
+            height={32}
+            alt="Globlo"
+            style={{ objectFit: 'contain', filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45))' }}
+          />
+          <img className="sidebar-brand-narrow" src={globloIcon} height={32} alt="Globlo" style={{ objectFit: 'contain' }} />
         </CSidebarBrand>
         <CCloseButton
           className="d-lg-none"

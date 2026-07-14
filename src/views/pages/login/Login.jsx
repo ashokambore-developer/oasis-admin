@@ -39,7 +39,7 @@ const Login = () => {
             <CCard className="p-4">
               <CCardBody>
                 <CForm onSubmit={handleSubmit}>
-                  <h1>Oasis Admin</h1>
+                  <h1>Globlo Admin</h1>
                   <p className="text-body-secondary mb-4">Sign in to your admin account</p>
 
                   {error && <CAlert color="danger">{error}</CAlert>}

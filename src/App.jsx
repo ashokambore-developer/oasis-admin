@@ -25,7 +25,7 @@ const queryClient = new QueryClient({
 })
 
 const App = () => {
-  const { isColorModeSet, setColorMode } = useColorModes('oasis-admin-theme')
+  const { isColorModeSet, setColorMode } = useColorModes('globlo-admin-theme')
   const storedTheme = useSelector((state) => state.theme)
 
   useEffect(() => {
